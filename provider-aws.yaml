@@ -1,0 +1,29 @@
+# These resources are created by default when the first family provider resources is created
+# apiVersion: pkg.crossplane.io/v1
+# kind: Provider
+# metadata:
+#   name: provider-aws
+# spec:
+#   package: xpkg.upbound.io/upbound/provider-family-aws:v1.23.1
+---
+# Family providers. Check the latest version if provider status is False.
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-aws-s3
+spec:
+  package: xpkg.upbound.io/upbound/provider-aws-s3:v1.23.1
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-aws-ec2
+spec:
+  package: xpkg.upbound.io/upbound/provider-aws-ec2:v1.23.1
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-aws-iam
+spec:
+  package: xpkg.upbound.io/upbound/provider-aws-iam:v1.23.1

@@ -1,0 +1,13 @@
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: InstanceState
+metadata:
+  name: demo-instance-state
+spec:
+  forProvider:
+    instanceIdSelector:
+      matchLabels:
+        app: demo
+    state: stopped                    # Desired state: running | stopped
+    region: us-east-1
+  providerConfigRef:
+    name: user-keys

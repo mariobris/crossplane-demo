@@ -1,0 +1,11 @@
+apiVersion: s3.aws.upbound.io/v1beta1
+kind: Bucket
+metadata:
+  name: 90210-user-bucket-demo
+  labels:
+    app: demo
+spec:
+  forProvider:
+    region: us-east-1
+  providerConfigRef:
+    name: user-keys

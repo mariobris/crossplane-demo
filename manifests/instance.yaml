@@ -1,0 +1,26 @@
+apiVersion: ec2.aws.upbound.io/v1beta2
+kind: Instance
+metadata:
+  name: demo-instance
+  labels:
+    app: demo
+spec:
+  forProvider:
+    instanceType: t2.micro    # Free Tier-eligible instance type[17][15]
+    ami: ami-01edd5711cfe3825c
+    region: us-east-1         # Must match your ProviderConfig region
+    tags:
+      Name: demo
+    subnetIdSelector:         # You must specify a subnet or security group (adjust as needed)
+      matchLabels:
+        app: demo
+        az: 1b
+    #   matchControllerRef: true
+    # securityGroupIdSelector:
+    #   matchControllerRef: true
+    # amiSelector:              # Select an AMI (such as Amazon Linux 2)
+    #   matchLabels:
+    #     "crossplane.io/usage": "example"
+    # keyName: your-ssh-keypair-name
+  providerConfigRef:
+    name: user-keys

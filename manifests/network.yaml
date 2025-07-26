@@ -1,0 +1,41 @@
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: Subnet
+metadata:
+  name: demo-subnet-1a
+  labels:
+    app: demo
+    az: 1a
+spec:
+  forProvider:
+    vpcIdSelector:            # This will select the VPC by the above name
+      matchLabels:
+        app: demo
+    cidrBlock: 192.168.0.0/25
+    region: us-east-1         # Same region as the VPC
+    availabilityZone: us-east-1a   # Set your preferred AZ
+    tags:
+      Name: demo-1a
+      az: 1a
+  providerConfigRef:
+    name: user-keys
+---
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: Subnet
+metadata:
+  name: demo-subnet-1b
+  labels:
+    app: demo
+    az: 1b
+spec:
+  forProvider:
+    vpcIdSelector:            # This will select the VPC by the above name
+      matchLabels:
+        app: demo
+    cidrBlock: 192.168.0.128/25
+    region: us-east-1         # Same region as the VPC
+    availabilityZone: us-east-1b   # Set your preferred AZ
+    tags:
+      Name: demo-1b
+      az: 1b
+  providerConfigRef:
+    name: user-keys
