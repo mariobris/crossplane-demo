@@ -1,0 +1,15 @@
+apiVersion: aws.example.org/v1alpha1
+kind: Compute
+metadata:
+  name: compute-x
+spec:
+  subnetSelector:
+    matchLabels:
+      app: xdemo
+      az: 1a
+  # Add other instance spec fields here if supported by your composite
+  # For example:
+  instanceType: t3.micro
+  ami: ami-01edd5711cfe3825c
+  # writeConnectionSecretToRef:
+  #   name: my-access-key-secret

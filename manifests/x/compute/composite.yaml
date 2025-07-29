@@ -1,20 +1,26 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: CompositeResourceDefinition
 metadata:
-  name: compositecomputes.aws.example.org
+  name: xcomputes.aws.example.org
 spec:
   group: aws.example.org
   names:
-    kind: CompositeCompute
-    plural: compositecomputes
+    kind: xCompute
+    plural: xcomputes
+    shortNames:
+      - cmp
   claimNames:
     kind: Compute
     plural: computes
-  scope: Namespaced
   versions:
     - name: v1alpha1
       served: true
       referenceable: true
+      additionalPrinterColumns:
+        - name: IpAddress
+          type: string
+          jsonPath: .status.privateIp
+          priority: 1
       schema:
         openAPIV3Schema:
           type: object
@@ -29,9 +35,13 @@ spec:
                       type: object
                       additionalProperties:
                         type: string
+                instanceType:
+                  type: string
+                ami:
+                  type: string
                 # Other instance properties...
             status:
               type: object
               properties:
-                instanceIP:
+                privateIp:
                   type: string

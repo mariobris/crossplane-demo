@@ -1,0 +1,40 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: instance
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: aws.example.org/v1alpha1
+    kind: xCompute
+  mode: Pipeline
+  pipeline:
+  - step: patch-and-transform
+    functionRef:
+      name: function-patch-and-transform  # your cluster-installed function
+    input:
+      apiVersion: pt.fn.crossplane.io/v1beta1
+      kind: Resources
+      resources:
+        - name: instance
+          base:
+            apiVersion: ec2.aws.upbound.io/v1beta1
+            kind: Instance
+            spec:
+              forProvider:
+                subnetIdSelector: {}
+                instanceType: t3.micro
+                ami: {}
+                region: us-east-1
+              providerConfigRef:
+                name: user-keys
+          patches:
+            - type: FromCompositeFieldPath
+              fromFieldPath: "spec.subnetSelector.matchLabels"
+              toFieldPath: "spec.forProvider.subnetIdSelector.matchLabels"
+            - type: FromCompositeFieldPath
+              fromFieldPath: "spec.ami"
+              toFieldPath: "spec.forProvider.ami"
+            - type: ToCompositeFieldPath
+              fromFieldPath: "status.atProvider.privateIp"
+              toFieldPath: "status.privateIp"

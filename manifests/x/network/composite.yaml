@@ -14,6 +14,11 @@ spec:
     - name: v1alpha1
       served: true
       referenceable: true
+      additionalPrinterColumns:
+        - name: VPC CIDR
+          type: string
+          jsonPath: .status.vpcCidrBlock
+          priority: 1
       schema:
         openAPIV3Schema:
           type: object
@@ -36,5 +41,6 @@ spec:
                   type: array
                   items:
                     type: string
-  connectionSecretKeys:
-    - cidrBlock
+  # This will limit what secrets are listed in claim
+  # connectionSecretKeys:
+  #   - cidrBlock
