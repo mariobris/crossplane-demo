@@ -1,0 +1,10 @@
+apiVersion: aws.example.org/v1alpha1
+kind: Network
+metadata:
+  name: demo-x
+  labels:
+    app: demo-x
+spec:
+  foo: xplane
+  writeConnectionSecretToRef:
+    name: dev-vpc-conn

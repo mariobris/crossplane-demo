@@ -5,14 +5,17 @@
 
 # Crossplane
 ## Install Crossplane
+
 ```
+cd crossplane-demo
 helm repo add crossplane-stable https://charts.crossplane.io/stable
 helm repo update
-helm upgrade crossplane --namespace crossplane-system --create-namespace crossplane-stable/crossplane
+helm upgrade -i crossplane --namespace crossplane-system --create-namespace crossplane-stable/crossplane
 # Wait for crossplane to be installed before applying other resources
 sleep 15
 kubectl apply -f provider-aws.yaml
 kubectl apply -f functions.yaml
+k config set-context --namespace crossplane-system --current
 ```
 
 ## Provider Configuration
@@ -89,21 +92,6 @@ A managed resource (MR) represents an external service in a Provider. When users
 - Google Cloud GKE Cluster defined in provider-upjet-gcp.
 - Microsoft Azure PostgreSQL Database defined in provider-upjet-azure.
 
-## Compositions
-https://docs.crossplane.io/latest/concepts/compositions/
-
-Compositions are a template for creating multiple managed resources as a single object.
-
-A Composition composes individual managed resources together into a larger, reusable, solution.
-
-An example Composition may combine a virtual machine, storage resources and networking policies. A Composition template links all these individual resources together.
-
-Crossplane calls a Function to determine what resources it should create when you create a composite resource. The Function also tells Crossplane what to do with these resources when you update or delete a composite resource.
-
-When Crossplane calls a Function it sends it the current state of the composite resource. It also sends it the current state of any managed resources the composite resource owns.
-
-If a Composition includes input Crossplane sends it to the function. Input is a useful way to provide extra configuration to a function. Supporting input is optional. Not all functions support input.
-
 ### Functions
 Installing a Function creates a function pod. Crossplane sends requests to this pod to ask it what resources to create when you create a composite resource.
 
@@ -115,6 +103,26 @@ metadata:
 spec:
   package: xpkg.crossplane.io/crossplane-contrib/function-patch-and-transform:v0.8.2
 ```
+
+## Simulation
+Preview changes https://docs.upbound.io/operate/simulations (IaC like `terraform plan`)
+
+## Compositions, XRD, Claims
+
+- Compositions - A template to define how to create resources. "Similar to terraform modules" (quoted).
+- Composite Resource Definition (XRD) - A custom k8s API specification. "Similar to CRD, e.g. deployment" (quoted).
+- Composite Resource (XR) - Created by using the custom API defined in a Composite Resource Definition. XRs use the Composition template to create new managed resources.
+- Claims (XRC) - Like a Composite Resource, but with namespace scoping. Useful for end users, e.g. developers
+
+### Compositions
+https://docs.crossplane.io/latest/concepts/compositions/
+
+Compositions are a template for creating multiple managed resources as a single object.
+
+A Composition composes individual managed resources together into a larger, reusable, solution.
+
+An example Composition may combine a virtual machine, storage resources and networking policies. A Composition template links all these individual resources together.
+
 
 # UI
 Komoplane from komodorio https://github.com/komodorio/komoplane

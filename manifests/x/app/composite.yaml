@@ -1,0 +1,37 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: compositecomputes.aws.example.org
+spec:
+  group: aws.example.org
+  names:
+    kind: CompositeCompute
+    plural: compositecomputes
+  claimNames:
+    kind: Compute
+    plural: computes
+  scope: Namespaced
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                subnetSelector:
+                  type: object
+                  properties:
+                    matchLabels:
+                      type: object
+                      additionalProperties:
+                        type: string
+                # Other instance properties...
+            status:
+              type: object
+              properties:
+                instanceIP:
+                  type: string

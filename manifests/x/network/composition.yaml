@@ -1,0 +1,119 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: vpc-subnet
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: aws.example.org/v1alpha1
+    kind: xNetwork
+  mode: Pipeline
+  pipeline:
+  - step: patch-and-transform
+    functionRef:
+      name: function-patch-and-transform  # your cluster-installed function
+    input:
+      apiVersion: pt.fn.crossplane.io/v1beta1
+      kind: Resources
+      resources:
+        - name: vpc
+          base:
+            apiVersion: ec2.aws.upbound.io/v1beta1
+            kind: VPC
+            metadata:
+              labels:
+                app: xdemo
+            spec:
+              forProvider:
+                cidrBlock: 192.168.0.0/16
+                region: us-east-1
+              providerConfigRef:
+                name: user-keys
+          connectionDetails:
+            - fromFieldPath: status.atProvider.cidrBlock
+              type: FromFieldPath
+              name: cidrBlock
+          patches:
+            # Patch tags.Name from composite resource metadata.name
+            - type: FromCompositeFieldPath
+              fromFieldPath: metadata.name
+              toFieldPath: spec.forProvider.tags.Name
+            # Patch Label.Label from composite resource metadata.name
+            - type: FromCompositeFieldPath
+              fromFieldPath: metadata.name
+              toFieldPath: metadata.labels.app
+            # Patch the VPC CIDR (once created) into composite resource status
+            - type: ToCompositeFieldPath
+              fromFieldPath: status.atProvider.cidrBlock
+              toFieldPath: status.vpcCidrBlock
+        - name: subnet-1a
+          base:
+            apiVersion: ec2.aws.upbound.io/v1beta1
+            kind: Subnet
+            spec:
+              forProvider:
+                region: us-east-1
+                cidrBlock: 192.168.0.0/24
+              providerConfigRef:
+                name: user-keys
+          patches:
+            # Patch Label.Label from composite resource metadata.name
+            - type: FromCompositeFieldPath
+              fromFieldPath: metadata.name
+              toFieldPath: metadata.labels.app
+            # Patch the VPC CIDR (once created) into composite resource status
+            - type: ToCompositeFieldPath
+              fromFieldPath: status.atProvider.cidrBlock
+              toFieldPath: status.vpcCidrBlock
+        - name: subnet-1a
+          base:
+            apiVersion: ec2.aws.upbound.io/v1beta1
+            kind: Subnet
+            spec:
+              forProvider:
+                region: us-east-1
+                cidrBlock: 192.168.0.0/24
+              providerConfigRef:
+                name: user-keys
+          patches:
+            # Patch Label.Label from composite resource metadata.name
+            - type: FromCompositeFieldPath
+              fromFieldPath: metadata.name
+              toFieldPath: metadata.labels.app
+            # Patch tags.Name is composite-name + "-1a"
+            - type: FromCompositeFieldPath
+              fromFieldPath: metadata.name
+              toFieldPath: spec.forProvider.tags.Name
+              transforms:
+              - type: string
+                string:
+                  type: Format
+                  fmt: "%s-1a"
+            # Patch vpcIdSelector.matchLabels.Name from composite resource metadata.name
+            - type: FromCompositeFieldPath
+              fromFieldPath: metadata.name
+              toFieldPath: spec.forProvider.vpcIdSelector.matchLabels.app
+        - name: subnet-1b
+          base:
+            apiVersion: ec2.aws.upbound.io/v1beta1
+            kind: Subnet
+            spec:
+              forProvider:
+                region: us-east-1
+                cidrBlock: 192.168.1.0/24
+              providerConfigRef:
+                name: user-keys
+          patches:
+            # Patch tags.Name is composite-name + "-1a"
+            - type: FromCompositeFieldPath
+              fromFieldPath: metadata.name
+              toFieldPath: spec.forProvider.tags.Name
+              transforms:
+              - type: string
+                string:
+                  type: Format
+                  fmt: "%s-1b"
+            # Patch vpcIdSelector.matchLabels.Name from composite resource metadata.name
+            - type: FromCompositeFieldPath
+              fromFieldPath: metadata.name
+              toFieldPath: spec.forProvider.vpcIdSelector.matchLabels.app
