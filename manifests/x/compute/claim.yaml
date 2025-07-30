@@ -14,3 +14,20 @@ spec:
   state: stopped
   # writeConnectionSecretToRef:
   #   name: my-access-key-secret
+---
+apiVersion: aws.example.org/v1alpha1
+kind: Compute
+metadata:
+  name: compute-y
+spec:
+  subnetSelector:
+    matchLabels:
+      app: xdemo
+      az: 1b
+  # Add other instance spec fields here if supported by your composite
+  # For example:
+  instanceType: t3.micro
+  ami: ami-01edd5711cfe3825c
+  state: stopped
+  # writeConnectionSecretToRef:
+  #   name: my-access-key-secret

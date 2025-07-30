@@ -38,6 +38,9 @@ spec:
             - type: FromCompositeFieldPath
               fromFieldPath: "spec.ami"
               toFieldPath: "spec.forProvider.ami"
+            - type: FromCompositeFieldPath
+              fromFieldPath: metadata.name
+              toFieldPath: metadata.labels.app
             - type: ToCompositeFieldPath
               fromFieldPath: "status.atProvider.privateIp"
               toFieldPath: "status.privateIp"
@@ -61,6 +64,9 @@ spec:
             - type: FromCompositeFieldPath
               fromFieldPath: spec.state
               toFieldPath: spec.forProvider.state
+            - type: FromCompositeFieldPath
+              fromFieldPath: metadata.name
+              toFieldPath: spec.forProvider.instanceIdSelector.matchLabels.app
             - type: ToCompositeFieldPath
               fromFieldPath: status.atProvider.state
               toFieldPath: status.state

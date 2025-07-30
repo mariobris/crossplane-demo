@@ -107,12 +107,24 @@ spec:
 ## Simulation
 Preview changes https://docs.upbound.io/operate/simulations (IaC like `terraform plan`)
 
-## Compositions, XRD, Claims
+## Managed Resource, Compositions, Composite Resource Definition, Composite, Claims
 
+- Managed Resource (MR) - A managed resource (MR) represents an external service in a Provider. E.g. ingress in k8s is Custom resource and EC2 instance in k8s is Managed Resource.
 - Compositions - A template to define how to create resources. "Similar to terraform modules" (quoted).
 - Composite Resource Definition (XRD) - A custom k8s API specification. "Similar to CRD, e.g. deployment" (quoted).
 - Composite Resource (XR) - Created by using the custom API defined in a Composite Resource Definition. XRs use the Composition template to create new managed resources.
 - Claims (XRC) - Like a Composite Resource, but with namespace scoping. Useful for end users, e.g. developers
+
+### Managed Resource
+https://docs.crossplane.io/latest/concepts/managed-resources/
+
+A managed resource (MR) represents an external service in a Provider. Crossplane calls the object inside Kubernetes a managed resource and the external object inside the Provider an external resource.
+
+Examples of managed resources:
+
+Amazon AWS EC2 Instance.
+Google Cloud GKE Cluster
+Microsoft Azure PostgreSQL Database.
 
 ### Compositions
 https://docs.crossplane.io/latest/concepts/compositions/
@@ -123,6 +135,18 @@ A Composition composes individual managed resources together into a larger, reus
 
 An example Composition may combine a virtual machine, storage resources and networking policies. A Composition template links all these individual resources together.
 
+### Composite
+https://docs.crossplane.io/latest/concepts/composite-resources/
+
+A composite resource represents a set of managed resources as a single Kubernetes object. Crossplane creates composite resources when users access a custom API, defined in the CompositeResourceDefinition.
+
+### Claim
+https://docs.crossplane.io/latest/concepts/claims/
+
+Claims represents a set of managed resources as a single Kubernetes object, inside a namespace.
+
+
+Claims are like composite resources. The difference between Claims and composite resources is Crossplane can create Claims in a namespace, while composite resources are cluster scoped.
 
 # UI
 Komoplane from komodorio https://github.com/komodorio/komoplane
