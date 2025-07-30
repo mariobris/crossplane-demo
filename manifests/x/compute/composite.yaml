@@ -21,6 +21,10 @@ spec:
           type: string
           jsonPath: .status.privateIp
           priority: 1
+        - name: InstanceState
+          type: string
+          jsonPath: .status.state
+          priority: 1
       schema:
         openAPIV3Schema:
           type: object
@@ -39,9 +43,13 @@ spec:
                   type: string
                 ami:
                   type: string
+                state:
+                  type: string
                 # Other instance properties...
             status:
               type: object
               properties:
                 privateIp:
+                  type: string
+                state:
                   type: string

@@ -20,6 +20,9 @@ spec:
           base:
             apiVersion: ec2.aws.upbound.io/v1beta1
             kind: Instance
+            metadata:
+              labels:
+                app: xdemo
             spec:
               forProvider:
                 subnetIdSelector: {}
@@ -38,3 +41,26 @@ spec:
             - type: ToCompositeFieldPath
               fromFieldPath: "status.atProvider.privateIp"
               toFieldPath: "status.privateIp"
+        - name: instanceState
+          base:
+            apiVersion: ec2.aws.upbound.io/v1beta1
+            kind: InstanceState
+            metadata:
+              labels:
+                app: xdemo
+            spec:
+              forProvider:
+                instanceIdSelector:
+                  matchLabels:
+                    app: xdemo
+                state: stopped                    # Desired state: running | stopped
+                region: us-east-1
+              providerConfigRef:
+                name: user-keys
+          patches:
+            - type: FromCompositeFieldPath
+              fromFieldPath: spec.state
+              toFieldPath: spec.forProvider.state
+            - type: ToCompositeFieldPath
+              fromFieldPath: status.atProvider.state
+              toFieldPath: status.state
