@@ -7,4 +7,4 @@ metadata:
 spec:
   foo: xplane
   writeConnectionSecretToRef:
-    name: dev-vpc-conn
+    name: dev-vpc-conn # secret with connectino details (example)

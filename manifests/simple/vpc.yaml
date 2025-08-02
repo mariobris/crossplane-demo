@@ -1,14 +1,19 @@
 apiVersion: ec2.aws.upbound.io/v1beta1
 kind: VPC
 metadata:
-  name: demo-vpc
+  name: demo-network-vpc-main
   labels:
     app: demo
+    environment: development
+    project: crossplane-demo
 spec:
   forProvider:
     cidrBlock: 192.168.0.0/24
     region: us-east-1         # Adjust as needed
     tags:
-      Name: demo
+      Name: demo-network-vpc-main
+      Environment: development
+      Project: crossplane-demo
+      Owner: demo-team
   providerConfigRef:
     name: user-keys

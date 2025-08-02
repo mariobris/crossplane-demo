@@ -28,28 +28,44 @@ spec:
       schema:
         openAPIV3Schema:
           type: object
+          description: "Compute composite resource for managing EC2 instances"
+          required: ["spec"]
           properties:
             spec:
               type: object
+              description: "Specification for the compute composite resource"
+              required: ["instanceType", "ami"]
               properties:
                 subnetSelector:
                   type: object
+                  description: "Selector to find the subnet for instance placement"
                   properties:
                     matchLabels:
                       type: object
+                      description: "Labels to match for subnet selection"
                       additionalProperties:
                         type: string
+                      example:
+                        app: "demo"
+                        environment: "development"
                 instanceType:
                   type: string
+                  description: "AWS EC2 instance type (e.g., t3.micro, t3.small, t3.medium)"
                 ami:
                   type: string
+                  description: "AWS AMI ID for the instance (e.g., ami-0c55b159cbfafe1f0)"
                 state:
                   type: string
-                # Other instance properties...
+                  description: "Desired instance state: running or stopped"
+                  enum: ["running", "stopped"]
+                  default: "stopped"
             status:
               type: object
+              description: "Status of the compute composite resource"
               properties:
                 privateIp:
                   type: string
+                  description: "Private IP address of the created EC2 instance"
                 state:
                   type: string
+                  description: "Current state of the EC2 instance (running, stopped, etc.)"

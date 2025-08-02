@@ -3,6 +3,7 @@ kind: Composition
 metadata:
   name: vpc-subnet
 spec:
+  # Just an example how to create secret for connection details in crossplane-system namespace
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
     apiVersion: aws.example.org/v1alpha1
@@ -29,6 +30,7 @@ spec:
                 region: us-east-1
               providerConfigRef:
                 name: user-keys
+          # Just an example how to create connection details secret
           connectionDetails:
             - fromFieldPath: status.atProvider.cidrBlock
               type: FromFieldPath
@@ -38,10 +40,6 @@ spec:
             - type: FromCompositeFieldPath
               fromFieldPath: metadata.name
               toFieldPath: spec.forProvider.tags.Name
-            # Patch Label.Label from composite resource metadata.name
-            # - type: FromCompositeFieldPath
-            #   fromFieldPath: metadata.name
-            #   toFieldPath: metadata.labels.app
             # Patch the VPC CIDR (once created) into composite resource status
             - type: ToCompositeFieldPath
               fromFieldPath: status.atProvider.cidrBlock
@@ -58,13 +56,13 @@ spec:
               forProvider:
                 region: us-east-1
                 cidrBlock: 192.168.0.0/24
+                vpcIdSelector:
+                  # example to use matchLabels instead of matchControllerRef
+                  matchLabels:
+                    app: xdemo
               providerConfigRef:
                 name: user-keys
           patches:
-            # Patch Label.Label from composite resource metadata.name
-            # - type: FromCompositeFieldPath
-            #   fromFieldPath: metadata.name
-            #   toFieldPath: metadata.labels.app
             # Patch the VPC CIDR (once created) into composite resource status
             - type: ToCompositeFieldPath
               fromFieldPath: status.atProvider.cidrBlock
@@ -81,6 +79,10 @@ spec:
               forProvider:
                 region: us-east-1
                 cidrBlock: 192.168.1.0/24
+                vpcIdSelector:
+                  # example to use matchLabels instead of matchControllerRef
+                  matchLabels:
+                    app: xdemo
               providerConfigRef:
                 name: user-keys
           patches:
@@ -93,10 +95,6 @@ spec:
                 string:
                   type: Format
                   fmt: "%s-1b"
-            # Patch vpcIdSelector.matchLabels.Name from composite resource metadata.name
-            # - type: FromCompositeFieldPath
-            #   fromFieldPath: metadata.name
-            #   toFieldPath: spec.forProvider.vpcIdSelector.matchLabels.app
             # Patch the VPC CIDR (once created) into composite resource status
             - type: ToCompositeFieldPath
               fromFieldPath: status.atProvider.cidrBlock

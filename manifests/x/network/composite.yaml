@@ -22,25 +22,38 @@ spec:
       schema:
         openAPIV3Schema:
           type: object
+          description: "Network composite resource for managing VPC and subnet infrastructure"
           properties:
             spec:
               type: object
+              description: "Specification for the network composite resource"
               properties:
+                environment:
+                  type: string
+                  description: "Environment name for resource tagging"
+                  enum: ["development", "staging", "production"]
+                  default: "development"
+                  example: "development"
                 foo:
                   type: string
+                  description: "Example field for demonstration purposes"
+                  pattern: "^[a-zA-Z0-9-]+$"
+                  minLength: 1
+                  maxLength: 50
             status:
               type: object
+              description: "Status of the network composite resource"
               properties:
                 vpcCidrBlock:
                   type: string
+                  description: "The CIDR block of the created VPC (e.g., 10.0.0.0/16)"
                 subnetCIDRs:
                   type: array
+                  description: "List of subnet CIDR blocks (e.g., ['10.0.1.0/24', '10.0.2.0/24'])"
                   items:
                     type: string
                 subnetAZs:
                   type: array
+                  description: "List of availability zones for subnets (e.g., ['us-east-1a', 'us-east-1b'])"
                   items:
                     type: string
-  # This will limit what secrets are listed in claim
-  # connectionSecretKeys:
-  #   - cidrBlock

@@ -1,41 +1,57 @@
 apiVersion: ec2.aws.upbound.io/v1beta1
 kind: Subnet
 metadata:
-  name: demo-subnet-1a
+  name: demo-network-subnet-private-1a
   labels:
     app: demo
+    environment: development
+    project: crossplane-demo
     az: 1a
+    type: private
 spec:
   forProvider:
     vpcIdSelector:            # This will select the VPC by the above name
       matchLabels:
         app: demo
+        environment: development
     cidrBlock: 192.168.0.0/25
     region: us-east-1         # Same region as the VPC
     availabilityZone: us-east-1a   # Set your preferred AZ
     tags:
-      Name: demo-1a
-      az: 1a
+      Name: demo-network-subnet-private-1a
+      Environment: development
+      Project: crossplane-demo
+      Owner: demo-team
+      Type: private
+      AZ: us-east-1a
   providerConfigRef:
     name: user-keys
 ---
 apiVersion: ec2.aws.upbound.io/v1beta1
 kind: Subnet
 metadata:
-  name: demo-subnet-1b
+  name: demo-network-subnet-private-1b
   labels:
     app: demo
+    environment: development
+    project: crossplane-demo
     az: 1b
+    type: private
 spec:
   forProvider:
     vpcIdSelector:            # This will select the VPC by the above name
       matchLabels:
         app: demo
+        environment: development
     cidrBlock: 192.168.0.128/25
     region: us-east-1         # Same region as the VPC
     availabilityZone: us-east-1b   # Set your preferred AZ
     tags:
-      Name: demo-1b
-      az: 1b
+      Name: demo-network-subnet-private-1b
+      Environment: development
+      Project: crossplane-demo
+      Owner: demo-team
+      Type: private
+      AZ: us-east-1b
   providerConfigRef:
     name: user-keys

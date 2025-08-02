@@ -1,0 +1,11 @@
+apiVersion: aws.example.org/v1alpha1
+kind: Compute
+metadata:
+  name: compute-x
+spec:
+  subnetSelector:
+    matchLabels:
+      app: xdemo
+      az: 1a
+  instanceType: t3.micro
+  ami: ami-01edd5711cfe3825c

@@ -1,11 +1,23 @@
 apiVersion: s3.aws.upbound.io/v1beta1
 kind: Bucket
 metadata:
-  name: 90210-user-bucket-demo
+  name: demo-storage-bucket-app-data-90210
   labels:
     app: demo
+    environment: development
+    project: crossplane-demo
+    type: app-data
 spec:
   forProvider:
     region: us-east-1
+    tags:
+      Name: demo-storage-bucket-app-data-90210
+      Environment: development
+      Project: crossplane-demo
+      Owner: demo-team
+      Type: app-data
   providerConfigRef:
     name: user-keys
+  writeConnectionSecretToRef:
+    name: demo-storage-bucket-app-data-90210
+    namespace: crossplane-system

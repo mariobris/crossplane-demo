@@ -1,13 +1,20 @@
 apiVersion: ec2.aws.upbound.io/v1beta1
 kind: InstanceState
 metadata:
-  name: demo-instance-state
+  name: demo-compute-instancestate-web
+  labels:
+    app: demo
+    environment: development
+    project: crossplane-demo
+    type: web-server
 spec:
   forProvider:
     instanceIdSelector:
       matchLabels:
         app: demo
+        environment: development
+        type: web-server
     state: stopped                    # Desired state: running | stopped
-    region: us-east-1
+    region: us-east-1                  # Must match your ProviderConfig region
   providerConfigRef:
     name: user-keys

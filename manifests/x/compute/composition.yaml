@@ -32,15 +32,19 @@ spec:
               providerConfigRef:
                 name: user-keys
           patches:
+            # patch subnetSelector from claim
             - type: FromCompositeFieldPath
               fromFieldPath: "spec.subnetSelector.matchLabels"
               toFieldPath: "spec.forProvider.subnetIdSelector.matchLabels"
+            # patch ami from claim
             - type: FromCompositeFieldPath
               fromFieldPath: "spec.ami"
               toFieldPath: "spec.forProvider.ami"
+            # patch instance label app with claim name
             - type: FromCompositeFieldPath
               fromFieldPath: metadata.name
               toFieldPath: metadata.labels.app
+            # patch instance private IP in claim status, kubectl -o wide
             - type: ToCompositeFieldPath
               fromFieldPath: "status.atProvider.privateIp"
               toFieldPath: "status.privateIp"
@@ -61,12 +65,42 @@ spec:
               providerConfigRef:
                 name: user-keys
           patches:
+            # patch desired instance state from claim
             - type: FromCompositeFieldPath
               fromFieldPath: spec.state
               toFieldPath: spec.forProvider.state
+            # patch labeselector with instance label
             - type: FromCompositeFieldPath
               fromFieldPath: metadata.name
               toFieldPath: spec.forProvider.instanceIdSelector.matchLabels.app
+            # patch instance state in claim, kubectl -o wide
             - type: ToCompositeFieldPath
               fromFieldPath: status.atProvider.state
               toFieldPath: status.state
+        - name: Bucket
+          base:
+            apiVersion: s3.aws.upbound.io/v1beta1
+            kind: Bucket
+            metadata:
+              labels:
+                app: xdemo
+            spec:
+              forProvider:
+                region: us-east-1
+              providerConfigRef:
+                name: user-keys
+              writeConnectionSecretToRef: {}
+          # Just an example how to create connection details secret
+          connectionDetails:
+            - type: FromFieldPath
+              fromFieldPath: status.atProvider.arn
+              name: arn
+          patches:
+            # patch writeConnectionSecretToRef name
+            - type: FromCompositeFieldPath
+              fromFieldPath: spec.claimRef.name
+              toFieldPath: spec.writeConnectionSecretToRef.name
+            # patch writeConnectionSecretToRef namespace
+            - type: FromCompositeFieldPath
+              fromFieldPath: spec.claimRef.namespace
+              toFieldPath: spec.writeConnectionSecretToRef.namespace
