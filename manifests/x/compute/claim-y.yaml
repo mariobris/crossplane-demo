@@ -10,3 +10,5 @@ spec:
   instanceType: t3.micro
   ami: ami-01edd5711cfe3825c
   state: running # default: stopped
+  writeConnectionSecretToRef:
+    name: compute-y-conn # secret with connectino details (example)
