@@ -21,9 +21,9 @@ metadata:
 spec:
   package: xpkg.upbound.io/upbound/provider-aws-ec2:v1.23.1
 ---
-apiVersion: pkg.crossplane.io/v1
-kind: Provider
-metadata:
-  name: provider-aws-iam
-spec:
-  package: xpkg.upbound.io/upbound/provider-aws-iam:v1.23.1
+# apiVersion: pkg.crossplane.io/v1
+# kind: Provider
+# metadata:
+#   name: provider-aws-iam
+# spec:
+#   package: xpkg.upbound.io/upbound/provider-aws-iam:v1.23.1

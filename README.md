@@ -6,8 +6,14 @@
 # Crossplane
 ## Install Crossplane
 
+Clone repository
 ```
+git clone https://github.com/mariobris/crossplane-demo
 cd crossplane-demo
+```
+
+Install crossplane helmchart
+```
 helm repo add crossplane-stable https://charts.crossplane.io/stable
 helm repo update
 helm upgrade -i crossplane --namespace crossplane-system --create-namespace crossplane-stable/crossplane
@@ -15,7 +21,7 @@ helm upgrade -i crossplane --namespace crossplane-system --create-namespace cros
 sleep 15
 kubectl apply -f provider-aws.yaml
 kubectl apply -f functions.yaml
-k config set-context --namespace crossplane-system --current
+kubectl config set-context --namespace default --current
 ```
 
 ## Provider Configuration

@@ -1,0 +1,31 @@
+{{- range .Values.subnets }}
+---
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: Subnet
+metadata:
+  name: {{ $.Values.name }}-network-subnet-{{ .type }}-{{ .az }}
+  labels:
+    app: {{ $.Values.name }}
+    environment: {{ $.Values.environment }}
+    project: {{ $.Values.project }}
+    az: {{ .az }}
+    type: {{ .type }}
+spec:
+  forProvider:
+    vpcIdSelector:
+      matchLabels:
+        app: {{ $.Values.name }}
+        environment: {{ $.Values.environment }}
+    cidrBlock: {{ .cidr }}
+    region: {{ $.Values.region }}
+    availabilityZone: us-east-{{ .az }}
+    tags:
+      Name: {{ $.Values.name }}-network-subnet-{{ .type }}-{{ .az }}
+      Environment: {{ $.Values.environment }}
+      Project: {{ $.Values.project }}
+      Owner: {{ $.Values.owner }}
+      Type: {{ .type }}
+      AZ: us-east-{{ .az }}
+  providerConfigRef:
+    name: {{ $.Values.providerConfig }}
+{{- end }}

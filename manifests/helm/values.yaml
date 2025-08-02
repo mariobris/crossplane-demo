@@ -1,0 +1,29 @@
+name: helm
+environment: development
+project: crossplane-demo
+owner: demo-team
+region: us-east-1
+providerConfig: user-keys
+
+vpc:
+  cidr: "192.168.0.0/16"
+
+instances:
+  - name: web-x
+    imageID: ami-01edd5711cfe3825c
+    subnet: 1a
+    type: web-server
+    state: running
+  - name: app-y
+    imageID: ami-01edd5711cfe3825c
+    subnet: 1b
+    type: app-server
+    state: stopped
+
+subnets:
+  - cidr: "192.168.0.0/25"
+    az: "1a"
+    type: "private"
+  - cidr: "192.168.0.128/25"
+    az: "1b"
+    type: "private"

@@ -1,0 +1,52 @@
+{{- range .Values.instances }}
+---
+apiVersion: ec2.aws.upbound.io/v1beta2
+kind: Instance
+metadata:
+  name: {{ $.Values.name }}-compute-instance-{{ .name }}
+  labels:
+    app: {{ $.Values.name }}
+    environment: {{ $.Values.environment }}
+    project: {{ $.Values.project }}
+    type: {{ .type }}
+spec:
+  forProvider:
+    instanceType: t2.micro    # Free Tier-eligible instance type[17][15]
+    ami: {{ .imageID }}
+    region: {{ $.Values.region }}
+    subnetIdSelector:
+      matchLabels:
+        app: {{ $.Values.name }}
+        environment: {{ $.Values.environment }}
+        az: {{ .subnet }}
+    tags:
+      Name: {{ $.Values.name }}-compute-instance-{{ .name }}
+      Environment: {{ $.Values.environment }}
+      Project: {{ $.Values.project }}
+      Owner: {{ $.Values.owner }}
+      Type: {{ .type }}
+  providerConfigRef:
+    name: {{ $.Values.providerConfig }}
+---
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: InstanceState
+metadata:
+  name: {{ $.Values.name }}-compute-instancestate-{{ .name }}
+  labels:
+    app: {{ $.Values.name }}
+    environment: {{ $.Values.environment }}
+    project: {{ $.Values.project }}
+    type: {{ .type }}
+spec:
+  forProvider:
+    instanceIdSelector:
+      matchLabels:
+        app: {{ $.Values.name }}
+        environment: {{ $.Values.environment }}
+        type: {{ .type }}
+    state: {{ .state }}
+    region: {{ $.Values.region }}
+  providerConfigRef:
+    name: {{ $.Values.providerConfig }}
+
+{{- end }}

@@ -1,0 +1,19 @@
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: VPC
+metadata:
+  name: {{ .Values.name }}-network-vpc-main
+  labels:
+    app: {{ .Values.name }}
+    environment: {{ .Values.environment }}
+    project: {{ .Values.project }}
+spec:
+  forProvider:
+    cidrBlock: {{ .Values.vpc.cidr | default "10.0.0.0/16" }}
+    region: {{ .Values.region | default "us-east-1" }}
+    tags:
+      Name: {{ .Values.name }}-network-vpc-main
+      Environment: {{ .Values.environment }}
+      Project: {{ .Values.project }}
+      Owner: {{ .Values.owner }}
+  providerConfigRef:
+    name: {{ .Values.providerConfig }}
