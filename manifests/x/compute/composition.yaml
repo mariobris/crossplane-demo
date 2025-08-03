@@ -1,7 +1,7 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: instance
+  name: compute-s3
 spec:
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
@@ -89,12 +89,7 @@ spec:
                 region: us-east-1
               providerConfigRef:
                 name: user-keys
-              writeConnectionSecretToRef: {}
-          # Just an example how to create connection details secret
-          connectionDetails:
-            - type: FromFieldPath
-              fromFieldPath: status.atProvider.arn
-              name: arn
+              writeConnectionSecretToRef: {} # This will create secret content based on S3 provider
           patches:
             # patch writeConnectionSecretToRef name
             - type: FromCompositeFieldPath
@@ -104,3 +99,10 @@ spec:
             - type: FromCompositeFieldPath
               fromFieldPath: spec.claimRef.namespace
               toFieldPath: spec.writeConnectionSecretToRef.namespace
+          # An example how to create connection details secret in 2 places:
+          # 1. Default in writeConnectionSecretsToNamespace namespace
+          # 2. writeConnectionSecretToRef.name in the same namespace as the claim
+          connectionDetails:
+            - type: FromFieldPath
+              fromFieldPath: status.atProvider.arn
+              name: arn

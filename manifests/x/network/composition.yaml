@@ -3,8 +3,6 @@ kind: Composition
 metadata:
   name: vpc-subnet
 spec:
-  # Just an example how to create secret for connection details in crossplane-system namespace
-  writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
     apiVersion: aws.example.org/v1alpha1
     kind: xNetwork
@@ -30,11 +28,6 @@ spec:
                 region: us-east-1
               providerConfigRef:
                 name: user-keys
-          # Just an example how to create connection details secret
-          connectionDetails:
-            - fromFieldPath: status.atProvider.cidrBlock
-              type: FromFieldPath
-              name: cidrBlock
           patches:
             # Patch tags.Name from composite resource metadata.name
             - type: FromCompositeFieldPath
@@ -67,6 +60,15 @@ spec:
             - type: ToCompositeFieldPath
               fromFieldPath: status.atProvider.cidrBlock
               toFieldPath: status.vpcCidrBlock
+            # Patch tags.Name is composite-name + "-1a"
+            - type: FromCompositeFieldPath
+              fromFieldPath: metadata.name
+              toFieldPath: spec.forProvider.tags.Name
+              transforms:
+              - type: string
+                string:
+                  type: Format
+                  fmt: "%s-1a"
         - name: subnet-1b
           base:
             apiVersion: ec2.aws.upbound.io/v1beta1
@@ -86,7 +88,7 @@ spec:
               providerConfigRef:
                 name: user-keys
           patches:
-            # Patch tags.Name is composite-name + "-1a"
+            # Patch tags.Name is composite-name + "-1b"
             - type: FromCompositeFieldPath
               fromFieldPath: metadata.name
               toFieldPath: spec.forProvider.tags.Name

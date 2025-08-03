@@ -2,6 +2,7 @@ apiVersion: aws.example.org/v1alpha1
 kind: Compute
 metadata:
   name: compute-y
+  namespace: crossplane-system
 spec:
   subnetSelector:
     matchLabels:

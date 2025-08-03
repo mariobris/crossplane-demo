@@ -10,4 +10,4 @@ spec:
   instanceType: t3.micro
   ami: ami-01edd5711cfe3825c
   writeConnectionSecretToRef:
-    name: compute-x-conn # secret with connectino details (example)
+    name: compute-x-conn # secret with connectino details (example is ARN string)

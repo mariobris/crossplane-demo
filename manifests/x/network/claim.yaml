@@ -1,10 +1,8 @@
 apiVersion: aws.example.org/v1alpha1
 kind: Network
 metadata:
-  name: demo-x
+  name: network-z
   labels:
-    app: demo-x
+    app: network-z
 spec:
   foo: xplane
-  writeConnectionSecretToRef:
-    name: dev-vpc-conn # secret with connectino details (example)
